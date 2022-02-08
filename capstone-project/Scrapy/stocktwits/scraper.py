@@ -83,7 +83,7 @@ class StockTwitsAPIScraper:
                 record["time"] = createdAt.timestamp()
                 record["created_time"] = m["created_at"]
                 record["sentiment"] = m["entities"]["sentiment"]["basic"] if m["entities"]["sentiment"] else ""
-                self.tweets.append(record)
+                self.tweets.append(m)
         else:
             print(response.text)        
         return True
