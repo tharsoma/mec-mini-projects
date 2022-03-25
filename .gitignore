@@ -14,3 +14,5 @@ Thumbs.db
 
 # VSCode
 .vscode/*
+capstone-project/Notebooks/Data/AAPL_OLD/
+capstone-project/Scrapy/stocktwits/stocks/AAPL/
