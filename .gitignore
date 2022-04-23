@@ -16,3 +16,4 @@ Thumbs.db
 .vscode/*
 capstone-project/Notebooks/Data/AAPL_OLD/
 capstone-project/Scrapy/stocktwits/stocks/AAPL/
+training_checkpoints/
