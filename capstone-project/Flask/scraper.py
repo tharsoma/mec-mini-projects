@@ -27,6 +27,8 @@ class StockTwitsAPIScraper:
     def initDir(self):
         if not os.path.isdir("stocks"):
             os.mkdir("stocks")
+        if not os.path.isdir("stocks/{}".format(self.symbol)):
+            os.mkdir("stocks/{}/".format(self.symbol))
         if not os.path.isdir("stocks/{}/Raw/".format(self.symbol)):
             os.mkdir("stocks/{}/Raw/".format(self.symbol))
 
