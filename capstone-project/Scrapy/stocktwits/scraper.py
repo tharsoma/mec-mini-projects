@@ -74,15 +74,15 @@ class StockTwitsAPIScraper:
             data["cursor"]["max"]
             for m in data["messages"]:
                 
-                record = {}            
+               # record = {}            
                 createdAt = datetime.strptime(m["created_at"], "%Y-%m-%dT%H:%M:%SZ")
                 if createdAt < self.targetDate:
                     return False
-                record["id"] = m["id"]
-                record["text"] = m["body"]
-                record["time"] = createdAt.timestamp()
-                record["created_time"] = m["created_at"]
-                record["sentiment"] = m["entities"]["sentiment"]["basic"] if m["entities"]["sentiment"] else ""
+              #  record["id"] = m["id"]
+              #  record["text"] = m["body"]
+              #  record["time"] = createdAt.timestamp()
+              #  record["created_time"] = m["created_at"]
+              #  record["sentiment"] = m["entities"]["sentiment"]["basic"] if m["entities"]["sentiment"] else ""
                 self.tweets.append(m)
         else:
             print(response.text)        
