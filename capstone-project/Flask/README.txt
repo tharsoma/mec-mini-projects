@@ -16,15 +16,17 @@ This capstone project is about using what people talk on stocktwit.com about sto
 
 The core data used on this project are obtained from both the stocktwits.com and yahoofinances.com. To get user data, stocktwit api was used. Here is an example of a person mentioning a stock. 
 
+
 Process
 
 Here is a list of actions performed to obtain our final result.
-
 Scrape stocktwit data from its API based on the stock ticker
 Get their set sentiment, and also derive their sentiment based on their message by using bag of words method.
 Scale sentiments from [0 to 1]
 add stocks prices to corresponding days based on  the stock ticker
 Once the data is cleaned, use linear regression to predict stock values for the given number of days.
+Add all functions to an API created with Flask
+Finally, all the following calls can be made to obtain the necessary evaluation of a stock.
 
 API Calls
 
@@ -47,4 +49,7 @@ http://127.0.0.1:5000/forecast/byfile/<string:ticker>/<string:file>
 This will return a forecast by its file name.
 
 http://127.0.0.1:5000/forecast/latest/<string:ticker>
-This will the most recent forecast that was generated.
+This will return the most recent forecast that was generated.
+
+Conclusion
+    This project covers most of the topics that were covered in the course. There are still many improvements that can be done to this project. However, this project covers the basics of data scraping, data wrangling, using linear regression ML model.
