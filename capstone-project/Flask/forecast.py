@@ -36,6 +36,8 @@ def getStats(ticker:str):
     return (json.dumps(x))
 
 def doForecast(ticker:str,days:int):
+    if not os.path.isdir("stocks/"+ticker+"/Forecast"):
+        os.mkdir("stocks/"+ticker+"/Forecast")
     file = "stocks/"+ticker+"/Wrangled/"+ticker+"_wrangled_data.csv"
     if os.path.exists(file) == False:
         y = {"file not found":0}

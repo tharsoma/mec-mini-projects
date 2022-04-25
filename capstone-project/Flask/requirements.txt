@@ -1,5 +1,9 @@
+nltk
 flask
 flask-restful
 pandas
+numpy
 yfinance
 sklearn
+bs4
+matplotlib

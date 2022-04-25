@@ -4,8 +4,8 @@ from datetime import timedelta
 import yfinance as yf
 from sklearn import linear_model 
 
-appl = yf.Ticker("AAPL")
-hist = appl.history(period="max")
+#stock = yf.Ticker("AAPL")
+#hist = stock.history(period="max")
 
 def subtract_days_from_date(date, days):
     """Subtract days from a date and return the date.
@@ -37,7 +37,9 @@ def get_raw_sentiment(sentimentPath):
     else:
         return sentimentPath["basic"]
     
-def get_stockprice_at_time(d):
+def get_stockprice_at_time(d,hist):
+    #stock = yf.Ticker(ticker)
+    #hist = stock.history(period="max")
     day = pd.to_datetime(d)
     #print(day.day)
     _day = str(day.year)+"-"+str(day.month)+"-"+str(day.day)
@@ -45,11 +47,13 @@ def get_stockprice_at_time(d):
         val = hist.loc[_day].Close
     except KeyError:
         d = subtract_days_from_date(_day, 1)
-        val = get_stockprice_at_time(d)
+        val = get_stockprice_at_time(d,hist)
         
     return round(val,3)
 
-def get_openprice_at_time(d):
+def get_openprice_at_time(d,hist):
+    #stock = yf.Ticker(ticker)
+    #hist = stock.history(period="max")
     day = pd.to_datetime(d)
     #print(day.day)
     _day = str(day.year)+"-"+str(day.month)+"-"+str(day.day)
@@ -57,11 +61,13 @@ def get_openprice_at_time(d):
         val = hist.loc[_day].Open
     except KeyError:
         d = subtract_days_from_date(_day, 1)
-        val = get_openprice_at_time(d)
+        val = get_openprice_at_time(d,hist)
         
     return round(val,3)
 
-def get_volume_at_time(d):
+def get_volume_at_time(d,hist):
+    #stock = yf.Ticker(ticker)
+    #hist = stock.history(period="max")
     day = pd.to_datetime(d)
     #print(day.day)
     _day = str(day.year)+"-"+str(day.month)+"-"+str(day.day)
@@ -69,7 +75,7 @@ def get_volume_at_time(d):
         val = hist.loc[_day].Volume
     except KeyError:
         d = subtract_days_from_date(_day, 1)
-        val = get_volume_at_time(d)
+        val = get_volume_at_time(d,hist)
         
     return round(val,3)
 
@@ -81,7 +87,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import re
 import nltk
-nltk.download('stopwords')
+#nltk.download('stopwords')
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 
@@ -160,9 +166,14 @@ def avg_sentiment(s1,s2):
 
 
 def runFunc(ticker:str):
+    
+    stock = yf.Ticker(ticker)
+    hist = stock.history(period="max")
+    if not os.path.isdir("stocks/"+ticker+"/Wrangled"):
+        os.mkdir("stocks/"+ticker+"/Wrangled")
     file_path = "stocks/"+ticker+"/Wrangled/"+ticker+"_wrangled_data.csv"
     if os.path.exists(file_path):
-         os.remove(file_path)
+        os.remove(file_path)
     
     path_to_json = 'stocks/'+ticker+'/Raw/'
     json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
@@ -173,7 +184,7 @@ def runFunc(ticker:str):
     for i in range(raw_json_data.shape[0]):
         ts = raw_json_data["created_at"][i]
         day = str(ts.year)+"-"+str(ts.month)+"-"+str(ts.day)
-        new_dataframe.loc[i]= [raw_json_data["created_at"][i],raw_json_data["user"][i]["username"],raw_json_data["body"][i],categoryize_sentiment(get_raw_sentiment(raw_json_data["entities"][i]["sentiment"])),get_bow_sentiment(raw_json_data["body"][i]),avg_sentiment(categoryize_sentiment(get_raw_sentiment(raw_json_data["entities"][i]["sentiment"])),get_bow_sentiment(raw_json_data["body"][i])),get_openprice_at_time(day),get_stockprice_at_time(day),get_volume_at_time(day)]
+        new_dataframe.loc[i]= [raw_json_data["created_at"][i],raw_json_data["user"][i]["username"],raw_json_data["body"][i],categoryize_sentiment(get_raw_sentiment(raw_json_data["entities"][i]["sentiment"])),get_bow_sentiment(raw_json_data["body"][i]),avg_sentiment(categoryize_sentiment(get_raw_sentiment(raw_json_data["entities"][i]["sentiment"])),get_bow_sentiment(raw_json_data["body"][i])),get_openprice_at_time(day,hist),get_stockprice_at_time(day,hist),get_volume_at_time(day,hist)]
         
     ndf = new_dataframe.groupby(by=new_dataframe['time_created'].dt.date).mean()
     X = ndf[['sentiment', 'open']]
